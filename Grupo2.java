@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Grupo2 {
     public static void main(String[] args) {
@@ -248,5 +249,22 @@ class Rota {
 
     public double calcularCustoPedagio() {
         return distancia * 0.1;
+    }
+}
+//Verificador de CPF
+
+public class ValidadorCPF {
+    public static boolean eCPF(string cpf){
+        if (cpf.equals("00000000000")||("11111111111")||("22222222222")||("33333333333")||("44444444444")||("55555555555")||("66666666666")||("77777777777")||("88888888888")||("999999999999")|| (cpf.length!=11)){
+            return(false);
+        }
+        try{
+            int soma = 0;
+            int peso = 10;
+            for(int i=0; i<9; i++){
+                int numero = (int) (cpf.charAt(i)-48);
+                soma = soma + (numero*peso);
+            }
+        }
     }
 }
