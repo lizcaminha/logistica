@@ -7,14 +7,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 
-public class Cliente implements Serializable{
+public class Motorista implements Serializable{
         private static final long serialVersionUID = 100L;
 
-    private String nome, endereco, email;
-    private static int cont = lerContador(), cpf, telefone;
+    private String nome, 
+    private static int cpf, cnh, exp;
+    private static int cont = lerContador();
     private int id;
     
-    public Cliente(){
+    public Motorista(){
         cont++;
         id = cont;
         salvarContador(cont);
@@ -32,10 +33,16 @@ public class Cliente implements Serializable{
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setCPF(int cpf) {
+        this.cpf = cpf;
+    }
+    public String getCPF() {
+        return cpf;
     }
 
+    public void setCNH(int cnh) {
+        this.cnh = cpf;
+    }
     public int getId() {
         return id;
     }

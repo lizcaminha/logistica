@@ -73,6 +73,15 @@ class SistemaLogistica {
         Motorista m = new Motorista(nome, cpf, cnh, anos);
         motoristas.add(m);
         System.out.println("Motorista cadastrado com sucesso!");
+
+        try (FileOutputStream fileOut = new FileOutputStream("src/data/Motorista"+m.getId()+".ser");
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(m); //Salva o aluno
+        } catch (FileNotFoundException ex) {
+            System.out.println("File Not Found Excpetion");
+        } catch (IOException ex) {
+            System.out.println("IO Exception");
+        }
     }
 
     // Cadastrar Veículo
@@ -90,6 +99,15 @@ class SistemaLogistica {
         Veiculo v = new Veiculo(placa, modelo, ano, carga);
         veiculos.add(v);
         System.out.println("Veículo cadastrado com sucesso!");
+
+        try (FileOutputStream fileOut = new FileOutputStream("src/data/Veiculo"+v.getId()+".ser");
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(v); //Salva o aluno
+        } catch (FileNotFoundException ex) {
+            System.out.println("File Not Found Excpetion");
+        } catch (IOException ex) {
+            System.out.println("IO Exception");
+        }
     }
 
     // Cadastrar Entrega
@@ -113,6 +131,15 @@ class SistemaLogistica {
         entregas.add(e);
 
         System.out.println("Entrega cadastrada com sucesso!");
+
+        try (FileOutputStream fileOut = new FileOutputStream("src/data/Entrega"+e.getId()+".ser");
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(e); //Salva o aluno
+        } catch (FileNotFoundException ex) {
+            System.out.println("File Not Found Excpetion");
+        } catch (IOException ex) {
+            System.out.println("IO Exception");
+        }
     }
 
     // Listagens
@@ -175,6 +202,7 @@ class Motorista {
     public String toString() {
         return nome + " | CPF: " + cpf + " | CNH: " + categoriaCNH + " | Bônus: R$" + calcularBonus();
     }
+    
 }
 
 class Veiculo {
@@ -251,6 +279,99 @@ class Rota {
         return distancia * 0.1;
     }
 }
+//INTERFACE DE SALVAMENTO
+ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+
+        File pasta = new File(diretorio);
+        Pattern pattern = Pattern.compile(padraoArquivo);
+        File[] arquivos = pasta.listFiles((dir, name) -> pattern.matcher(name).matches());
+        
+        int i=1;
+        StringBuilder sb = new StringBuilder("<html>");
+        for (File arq : arquivos) {//for-each
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(arq))) {
+                Motorista m = (Motorista) ois.readObject();
+                sb.append("Motorista ")
+                .append(i)
+                .append(": Nome: ")
+                .append(m.getNome())
+                .append(" | CPF: ")
+                .append(m.getCPF())
+                .append(": Categoria CNH: ")
+                .append(m.getCNH())
+                .append(" | Anos de Experiência: ")
+                .append(m.getExp())
+                .append("<br>");    
+                i++;
+            } catch (Exception e) {
+                System.out.println("Erro ao ler arquivo: "+arq.getName()+"-"+e.getMessage());
+            }
+            //VER SE ISSO ESTA CERTO
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(arq))) {
+                Veiculo v = (Veiculo) ois.readObject();
+                sb.append("Veículo ")
+                .append(i)
+                .append(": Placa: ")
+                .append(v.getPlaca())
+                .append(" | Modelo: ")
+                .append(v.getModelo())
+                .append(": Ano: ")
+                .append(v.getAno())
+                .append(" | Capacidade (kgs): ")
+                .append(v.getCarga())
+                .append("<br>");    
+                i++;
+            } catch (Exception e) {
+                System.out.println("Erro ao ler arquivo: "+arq.getName()+"-"+e.getMessage());
+            }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(arq))) {
+                Entrega e = (Entrega) ois.readObject();
+                sb.append("Entrega ")
+                .append(i)
+                .append(": Motorista: ")
+                .append(e.getMotorista())
+                .append(" | Veículo: ")
+                .append(e.getVeiculo())
+                .append(": Rota: ")
+                .append(e.getRota())
+                .append("<br>");    
+                i++;
+            } catch (Exception e) {
+                System.out.println("Erro ao ler arquivo: "+arq.getName()+"-"+e.getMessage());
+            }
+        }
+        sb.append("</html>");
+        jLabel3.setText(sb.toString());
+                
+        CardLayout cla = (CardLayout) (jPanel2.getLayout());
+        cla.show(jPanel2, "card3");
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new Cadastro().setVisible(true));
+    }
+
 //Verificador de CPF
 
 public class ValidadorCPF {
